@@ -2,9 +2,10 @@ server:
   port: 8080
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/fintech
+    url: jdbc:mysql://127.0.0.1:3306/fintech?zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
     username: jyuka
     password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: create
@@ -13,8 +14,9 @@ spring:
         format_sql: true
         jdbc.lob.non_contextual_creation: true
       naming:
+        # jpa class 명은 camel case 지만 이를 snake case 로 변환해주는 것을 명시
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect # 추가 해준 부분
   h2:
     console:
       path: /h2-console

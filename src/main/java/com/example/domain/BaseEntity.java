@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 public abstract class BaseEntity implements Serializable {
 
     @CreatedDate
-    @Column(columnDefinition = "datetime default CURRENT_TIMESTAMP NOT NULL COMMENT '생성일자'")
+    @Column(updatable = false, columnDefinition = "datetime default CURRENT_TIMESTAMP NOT NULL COMMENT '생성일자'")
     private LocalDateTime createdAt;
 
     @LastModifiedDate
