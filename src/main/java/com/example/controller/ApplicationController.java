@@ -58,30 +58,30 @@ public class ApplicationController extends AbstractController{
         return ok(applicationService.acceptTerms(applicationId, request));
     }
 
-    @PostMapping("/files")
-    public ResponseDto upload(MultipartFile file){
-        fileStorageService.save(file);
+    @PostMapping("/{applicationId}/files")
+    public ResponseDto upload(@PathVariable Long applicationId, MultipartFile file){
+        fileStorageService.save(applicationId, file);
         return ok();
     }
 
-    @GetMapping("/files")
-    public ResponseEntity<Resource> download(String fileName){
-        Resource file = fileStorageService.load(fileName);
+    @GetMapping("/{applicationId}/files")
+    public ResponseEntity<Resource> download(@PathVariable Long applicationId, String fileName){
+        Resource file = fileStorageService.load(applicationId, fileName);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename:\"" + file.getFilename() + "\"")
                 .body(file);
     }
 
-    @GetMapping("/files/infos")
-    public ResponseDto<List<FileDto>> getFileInfos(){
-        List<FileDto> fileInfos = fileStorageService.loadALl()
+    @GetMapping("/{applicationId}/files/infos")
+    public ResponseDto<List<FileDto>> getFileInfos(@PathVariable Long applicationId){
+        List<FileDto> fileInfos = fileStorageService.loadALl(applicationId)
                 .map(path -> {
                     String fileName = path.getFileName().toString();
                     return FileDto.builder()
                             .name(fileName)
                             .url(
                                     MvcUriComponentsBuilder
-                                            .fromMethodName(ApplicationController.class,"download",fileName)
+                                            .fromMethodName(ApplicationController.class,"download", applicationId, fileName)
                                             .build()
                                             .toString()
                             )
@@ -91,9 +91,9 @@ public class ApplicationController extends AbstractController{
         return ok(fileInfos);
     }
 
-    @DeleteMapping("/files")
-    public ResponseDto deleteAll(){
-        fileStorageService.deleteAll();
+    @DeleteMapping("/{applicationId}/files")
+    public ResponseDto deleteAll(@PathVariable Long applicationId){
+        fileStorageService.deleteAll(applicationId);
         return ok();
     }
 }
