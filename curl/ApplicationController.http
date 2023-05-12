@@ -8,12 +8,18 @@ Content-Type: application/json
 GET http://localhost:8080/applications/1
 Content-Type: application/json
 
-### 상담 내역 수정
+### 대출 신청 내역 수정
 PUT http://localhost:8080/applications/1
 Content-Type: application/json
 
 < ./json/UpdateApplication.json
 
-### 상담 내역 삭제
+### 대출 신청 내역 삭제
 DELETE http://localhost:8080/applications/1
 Content-Type: application/json
+
+### 대출 신청시 사용자가 동의한 약관 id 정보를 전달
+POST http://localhost:8080/applications/1/terms
+Content-Type: application/json
+
+< ./json/CreateAcceptTerms.json

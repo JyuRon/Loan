@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.dto.ApplicationDto.Request;
 import com.example.dto.ApplicationDto.Response;
+import com.example.dto.ApplicationDto.AcceptTerms;
 import com.example.dto.ResponseDto;
 import com.example.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
@@ -36,5 +37,13 @@ public class ApplicationController extends AbstractController{
     public ResponseDto delete(@PathVariable Long applicationId){
         applicationService.delete(applicationId);;
         return ok();
+    }
+
+    @PostMapping("/{applicationId}/terms")
+    public ResponseDto<Boolean> acceptTerms(
+            @PathVariable Long applicationId,
+            @RequestBody AcceptTerms request
+    ){
+        return ok(applicationService.acceptTerms(applicationId, request));
     }
 }

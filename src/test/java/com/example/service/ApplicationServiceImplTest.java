@@ -1,9 +1,15 @@
 package com.example.service;
 
+import com.example.domain.AcceptTerms;
 import com.example.domain.Application;
+import com.example.domain.Terms;
+import com.example.dto.ApplicationDto;
 import com.example.dto.ApplicationDto.Response;
 import com.example.dto.ApplicationDto.Request;
+import com.example.exception.BaseException;
+import com.example.repository.AcceptTermsRepository;
 import com.example.repository.ApplicationRepository;
+import com.example.repository.TermsRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,8 +18,11 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -24,12 +33,11 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class ApplicationServiceImplTest {
 
-    @InjectMocks
-    private ApplicationServiceImpl applicationService;
-    @Mock
-    private ApplicationRepository applicationRepository;
-    @Spy
-    private ModelMapper modelMapper;
+    @InjectMocks private ApplicationServiceImpl applicationService;
+    @Mock private ApplicationRepository applicationRepository;
+    @Mock private TermsRepository termsRepository;
+    @Mock private AcceptTermsRepository acceptTermsRepository;
+    @Spy private ModelMapper modelMapper;
 
     @DisplayName("대출 신청 양식을 받아 DB에 저장한다.")
     @Test
@@ -123,6 +131,116 @@ class ApplicationServiceImplTest {
 
         // Then
         assertThat(application.getIsDeleted()).isTrue();
+    }
+
+    @DisplayName("신창자가 동의한 약관이 서버에서 제공한 약관을 모두 동의하였는지 판단 후 결과를 저장한다.")
+    @Test
+    void Should_AddAcceptTerms_When_RequestAcceptTermsOfApplication(){
+        // Given
+        Terms entityA = Terms.builder()
+                .termsId(1L)
+                .name("대출 이용 약관 1")
+                .termsDetailUrl("https://abc-storage.acc/dslfjdlsfjlsdddads")
+                .build();
+
+        Terms entityB = Terms.builder()
+                .termsId(2L)
+                .name("대출 이용 약관 2")
+                .termsDetailUrl("https://abc-storage.acc/dslfjdlsfjlsdweqwq")
+                .build();
+
+        List<Long> acceptTerms = Arrays.asList(1L, 2L);
+
+        ApplicationDto.AcceptTerms request = ApplicationDto.AcceptTerms.builder()
+                .acceptTermsIds(acceptTerms)
+                .build();
+
+        Long findId = 1L;
+
+        given(applicationRepository.findById(anyLong()))
+                .willReturn(Optional.ofNullable(Application.builder().build()));
+        given(termsRepository.findAll(Sort.by(Sort.Direction.ASC, "termsId")))
+                .willReturn(Arrays.asList(entityA, entityB));
+        given(acceptTermsRepository.save(any(AcceptTerms.class)))
+                .willReturn(AcceptTerms.builder().build());
+
+        // When
+        Boolean actual = applicationService.acceptTerms(findId, request);
+
+        // Then
+        assertThat(actual).isTrue();
+    }
+
+    @DisplayName("사용자가 약관 동의를 모두 하지 않은 경우 예외를 반한한다.")
+    @Test
+    void Should_ThrowException_When_RequestNotAllAcceptTermsOfApplication() {
+        // Given
+        Terms entityA = Terms.builder()
+                .termsId(1L)
+                .name("대출 이용 약관 1")
+                .termsDetailUrl("https://abc-storage.acc/dslfjdlsfjlsdddads")
+                .build();
+
+        Terms entityB = Terms.builder()
+                .termsId(2L)
+                .name("대출 이용 약관 2")
+                .termsDetailUrl("https://abc-storage.acc/dslfjdlsfjlsdweqwq")
+                .build();
+
+        List<Long> acceptTerms = Arrays.asList(1L);
+
+        ApplicationDto.AcceptTerms request = ApplicationDto.AcceptTerms.builder()
+                .acceptTermsIds(acceptTerms)
+                .build();
+
+        Long findId = 1L;
+
+        given(applicationRepository.findById(findId)).willReturn(
+                Optional.ofNullable(Application.builder().build()));
+        given(termsRepository.findAll(Sort.by(Sort.Direction.ASC, "termsId")))
+                .willReturn(Arrays.asList(entityA, entityB));
+
+        // When
+        Throwable t = catchThrowable(() -> applicationService.acceptTerms(1L, request));
+
+        // Then
+        assertThat(t).isInstanceOf(BaseException.class);
+    }
+
+    @DisplayName("존재하지 않는 약관을 동의한 경우 예외를 발생시킨다.")
+    @Test
+    void Should_ThrowException_When_RequestNotExistAcceptTermsOfApplication() {
+        // Given
+        Terms entityA = Terms.builder()
+                .termsId(1L)
+                .name("대출 이용 약관 1")
+                .termsDetailUrl("https://abc-storage.acc/dslfjdlsfjlsdddads")
+                .build();
+
+        Terms entityB = Terms.builder()
+                .termsId(2L)
+                .name("대출 이용 약관 2")
+                .termsDetailUrl("https://abc-storage.acc/dslfjdlsfjlsdweqwq")
+                .build();
+
+        List<Long> acceptTerms = Arrays.asList(1L, 3L);
+
+        ApplicationDto.AcceptTerms request = ApplicationDto.AcceptTerms.builder()
+                .acceptTermsIds(acceptTerms)
+                .build();
+
+        Long findId = 1L;
+
+        given(applicationRepository.findById(findId))
+                .willReturn(Optional.ofNullable(Application.builder().build()));
+        given(termsRepository.findAll(Sort.by(Sort.Direction.ASC, "termsId")))
+                .willReturn(Arrays.asList(entityA, entityB));
+
+        // When
+        Throwable t = catchThrowable(() -> applicationService.acceptTerms(1L, request));
+
+        // Then
+        assertThat(t).isInstanceOf(BaseException.class);
     }
 
 
