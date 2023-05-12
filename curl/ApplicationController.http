@@ -42,3 +42,8 @@ Content-Type: application/octet-stream
 ### 업로드된 전체 파일 리스트 조회
 GET http://localhost:8080/applications/files/infos
 Content-Type: application/json
+
+
+### 업로드된 전체 파일 삭제
+DELETE http://localhost:8080/applications/files
+Content-Type: application/json

@@ -10,4 +10,5 @@ public interface FileStorageService {
     void save(MultipartFile file);
     Resource load(String fileName);
     Stream<Path> loadALl();
+    void deleteAll();
 }
