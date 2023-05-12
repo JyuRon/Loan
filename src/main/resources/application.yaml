@@ -21,5 +21,10 @@ spring:
     console:
       path: /h2-console
       enabled: true
+  servlet:
+    multipart:
+      maxFileSize: 10MB # 개별 파일에 대한 용량 제한
+      maxRequestSize: 10MB # 전체 파일에 대한 용량 제한
+      location: /Users/jyuka/workspace/fin-tech/uploadFile
 logging.level:
   org.hibernate.SQL: debug

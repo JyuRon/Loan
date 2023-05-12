@@ -5,8 +5,10 @@ import com.example.dto.ApplicationDto.Response;
 import com.example.dto.ApplicationDto.AcceptTerms;
 import com.example.dto.ResponseDto;
 import com.example.service.ApplicationService;
+import com.example.service.FileStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class ApplicationController extends AbstractController{
 
     private final ApplicationService applicationService;
+    private final FileStorageService fileStorageService;
 
     @PostMapping
     public ResponseDto<Response> create(@RequestBody Request request){
@@ -45,5 +48,11 @@ public class ApplicationController extends AbstractController{
             @RequestBody AcceptTerms request
     ){
         return ok(applicationService.acceptTerms(applicationId, request));
+    }
+
+    @PostMapping("/files")
+    public ResponseDto upload(MultipartFile file){
+        fileStorageService.save(file);
+        return ok();
     }
 }
