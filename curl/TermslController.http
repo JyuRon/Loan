@@ -1,0 +1,10 @@
+### 신규 약관 등록
+POST http://localhost:8080/terms
+Content-Type: application/json
+
+< ./json/CreateTerms.json
+
+
+### 약관 전체 조회
+GET http://localhost:8080/terms
+Content-Type: application/json

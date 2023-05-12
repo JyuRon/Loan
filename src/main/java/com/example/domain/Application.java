@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @DynamicInsert
 @DynamicUpdate
 @Where(clause = "is_deleted=false")
+/** 대출 신청 */
 public class Application extends BaseEntity {
 
   @Id
@@ -56,4 +57,9 @@ public class Application extends BaseEntity {
   @Column(columnDefinition = "datetime DEFAULT NULL COMMENT '신청일자'")
   private LocalDateTime appliedAt;
 
+//  @Column(columnDefinition = "decimal(15,2) DEFAULT NULL COMMENT '승인 금액'")
+//  private BigDecimal approvalAmount;
+//
+//  @Column(columnDefinition = "datetime DEFAULT NULL COMMENT '약정일자'")
+//  private LocalDateTime contractedAt;
 }

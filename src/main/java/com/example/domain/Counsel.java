@@ -1,7 +1,6 @@
 package com.example.domain;
 
 import lombok.*;
-import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Where;
@@ -18,6 +17,7 @@ import java.time.LocalDateTime;
 @DynamicInsert
 @DynamicUpdate
 @Where(clause = "is_deleted=false")
+/** 상담 내역 */
 public class Counsel extends BaseEntity{
 
     @Id
