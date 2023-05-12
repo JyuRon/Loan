@@ -38,3 +38,7 @@ Content-Disposition: form-data; name="file"; filename="test1.txt"
 ### 단일 파일 다운로드
 GET http://localhost:8080/applications/files?fileName=test1.txt
 Content-Type: application/octet-stream
+
+### 업로드된 전체 파일 리스트 조회
+GET http://localhost:8080/applications/files/infos
+Content-Type: application/json
