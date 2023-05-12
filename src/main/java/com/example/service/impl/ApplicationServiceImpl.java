@@ -1,4 +1,4 @@
-package com.example.service;
+package com.example.service.impl;
 
 import com.example.domain.Application;
 import com.example.domain.Terms;
@@ -10,6 +10,7 @@ import com.example.exception.ResultType;
 import com.example.repository.AcceptTermsRepository;
 import com.example.repository.ApplicationRepository;
 import com.example.repository.TermsRepository;
+import com.example.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;

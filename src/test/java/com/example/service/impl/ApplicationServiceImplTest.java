@@ -1,11 +1,11 @@
-package com.example.service;
+package com.example.service.impl;
 
 import com.example.domain.AcceptTerms;
 import com.example.domain.Application;
 import com.example.domain.Terms;
 import com.example.dto.ApplicationDto;
-import com.example.dto.ApplicationDto.Response;
 import com.example.dto.ApplicationDto.Request;
+import com.example.dto.ApplicationDto.Response;
 import com.example.exception.BaseException;
 import com.example.repository.AcceptTermsRepository;
 import com.example.repository.ApplicationRepository;
@@ -25,7 +25,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;

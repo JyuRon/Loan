@@ -1,4 +1,4 @@
-package com.example.service;
+package com.example.service.impl;
 
 import com.example.domain.Counsel;
 import com.example.dto.CounselDto.Response;
@@ -6,6 +6,7 @@ import com.example.dto.CounselDto.Request;
 import com.example.exception.BaseException;
 import com.example.exception.ResultType;
 import com.example.repository.CounselRepository;
+import com.example.service.CounselService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class CounselServiceImpl implements CounselService{
+public class CounselServiceImpl implements CounselService {
 
     private final ModelMapper modelMapper;
     private final CounselRepository counselRepository;
