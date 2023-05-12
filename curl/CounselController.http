@@ -1,0 +1,20 @@
+### 상담등록
+POST http://localhost:8080/counsels
+Content-Type: application/json
+
+< ./json/CreateCounsel.json
+
+
+### 상담 내역 조회
+GET http://localhost:8080/counsels/1
+Content-Type: application/json
+
+### 상담 내역 수정
+PUT http://localhost:8080/counsels/1
+Content-Type: application/json
+
+< ./json/UpdateCounsel.json
+
+### 상담 내역 삭제
+DELETE http://localhost:8080/counsels/2
+Content-Type: application/json
