@@ -5,11 +5,14 @@ import com.example.exception.ResultType;
 import com.example.service.FileStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
@@ -29,6 +32,23 @@ public class FileStorageServiceImpl implements FileStorageService {
                     StandardCopyOption.REPLACE_EXISTING
             );
         } catch (IOException e) {
+            throw new BaseException(ResultType.SYSTEM_ERROR);
+        }
+    }
+
+    @Override
+    public Resource load(String fileName) {
+        try {
+            Path file = Paths.get(uploadPath).resolve(fileName);
+
+            Resource resource = new UrlResource(file.toUri());
+
+            if (resource.isReadable() || resource.exists()) {
+                return resource;
+            } else {
+                throw new BaseException(ResultType.NOT_EXIST_FILE);
+            }
+        }catch (Exception e) {
             throw new BaseException(ResultType.SYSTEM_ERROR);
         }
     }

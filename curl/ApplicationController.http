@@ -34,3 +34,7 @@ Content-Disposition: form-data; name="file"; filename="test1.txt"
 
 < ./requestFIle/test1.txt
 --boundary--
+
+### 단일 파일 다운로드
+GET http://localhost:8080/applications/files?fileName=test1.txt
+Content-Type: application/octet-stream

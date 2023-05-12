@@ -7,6 +7,9 @@ import com.example.dto.ResponseDto;
 import com.example.service.ApplicationService;
 import com.example.service.FileStorageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -54,5 +57,13 @@ public class ApplicationController extends AbstractController{
     public ResponseDto upload(MultipartFile file){
         fileStorageService.save(file);
         return ok();
+    }
+
+    @GetMapping("/files")
+    public ResponseEntity<Resource> download(String fileName){
+        Resource file = fileStorageService.load(fileName);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename:\"" + file.getFilename() + "\"")
+                .body(file);
     }
 }
