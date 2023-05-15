@@ -21,3 +21,7 @@ Content-Type: application/json
 ### 대출 심사 결과 삭제
 DELETE http://localhost:8080/judgements/1
 Content-Type: application/json
+
+### 대출 심사 결과 대출 신청 서류에 반영
+PATCH http://localhost:8080/judgements/1/grant
+Content-Type: application/json

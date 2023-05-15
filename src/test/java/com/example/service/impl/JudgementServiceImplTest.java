@@ -2,6 +2,7 @@ package com.example.service.impl;
 
 import com.example.domain.Application;
 import com.example.domain.Judgement;
+import com.example.dto.ApplicationDto;
 import com.example.dto.JudgementDto.Request;
 import com.example.dto.JudgementDto.Response;
 import com.example.repository.ApplicationRepository;
@@ -141,7 +142,7 @@ class JudgementServiceImplTest {
 
     @DisplayName("대출 심사 결과를 삭제한다.")
     @Test
-    void Should_ReturnUpdatedResponseOfExistApplicationEntity_When_RequestGrantApprovalAmountOfJudgmentInfo(){
+    void Should_DeletedJudgmentEntity_When_RequestDeleteExistJudgmentInfo(){
         // Given
         Long judgementId = 1L;
         Judgement judgement = Judgement.builder()
@@ -158,6 +159,39 @@ class JudgementServiceImplTest {
 
         // Then
         assertThat(judgement.getIsDeleted()).isTrue();
+    }
+
+    @DisplayName("대출 심사 결과를 대출 신청 서류 정보에 반영한다.")
+    @Test
+    void Should_ReturnUpdatedResponseOfExistApplicationEntity_When_RequestGrantApprovalAmountOfJudgmentInfo(){
+        // Given
+        Long judgementId = 1L;
+        Long applicationId = 1L;
+
+        Judgement judgement = Judgement.builder()
+                .name("jyuka")
+                .applicationId(applicationId)
+                .approvalAmount(BigDecimal.valueOf(50000000))
+                .build();
+
+        Application application = Application.builder()
+                .applicationId(applicationId)
+                .approvalAmount(BigDecimal.valueOf(50000000))
+                .build();
+
+        given(judgementRepository.findById(anyLong()))
+                .willReturn(Optional.ofNullable(judgement));
+        given(applicationRepository.findById(anyLong()))
+                .willReturn(Optional.ofNullable(application));
+        given(applicationRepository.save(any(Application.class)))
+                .willReturn(application);
+
+        // When
+        ApplicationDto.GrantAmount result = judgementService.grant(judgementId);
+
+        // Then
+        assertThat(result.getApplicationId()).isEqualTo(applicationId);
+        assertThat(result.getApprovalAmount()).isEqualTo(judgement.getApprovalAmount());
     }
 
 }

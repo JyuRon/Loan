@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.domain.BaseEntity;
+import com.example.dto.ApplicationDto;
 import com.example.dto.JudgementDto.Response;
 import com.example.dto.JudgementDto.Request;
 import com.example.dto.ResponseDto;
@@ -44,6 +45,11 @@ public class JudgementController extends BaseEntity {
     public ResponseDto<Void> delete(@PathVariable Long judgementId){
         judgementService.delete(judgementId);
         return ok();
+    }
+
+    @PatchMapping("/{judgementId}/grant")
+    public ResponseDto<ApplicationDto.GrantAmount> grant(@PathVariable Long judgementId){
+        return ok(judgementService.grant(judgementId));
     }
 }
 
