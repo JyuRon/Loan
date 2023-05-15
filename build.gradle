@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.11'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'com.google.cloud.tools.jib' version '3.2.0'
 }
 
 group = 'com.example'
@@ -16,6 +17,23 @@ configurations {
 
 repositories {
 	mavenCentral()
+}
+
+jib{
+	from{
+		image = 'openjdk:17'
+	}
+	to{
+		image = 'loan'
+		tags = ['0.0.1']
+	}
+	container{
+		mainClass = 'com.example.FinTechApplication'
+		creationTime = 'USE_CURRENT_TIMESTAMP'
+		format = 'OCI'
+		volumes = ['/var/tmp']
+		entrypoint = ['java', '-cp', '/app/resources:/app/classes:/app/libs/*', 'com.example.FinTechApplication']
+	}
 }
 
 dependencies {
