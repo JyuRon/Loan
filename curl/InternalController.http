@@ -1,0 +1,19 @@
+### 대출 집행 정보 등록
+POST http://localhost:8080/internal/applications/1/entries
+Content-Type: application/json
+
+< ./json/CreateEntry.json
+
+### 대출 집행 정보 조회
+GET http://localhost:8080/internal/applications/1/entries
+Content-Type: application/json
+
+### 대출 집행 정보 수정
+PUT http://localhost:8080/internal/applications/entries/1
+Content-Type: application/json
+
+< ./json/UpdateEntry.json
+
+### 대출 집행 정보 삭제
+DELETE http://localhost:8080/internal/applications/entries/1
+Content-Type: application/json

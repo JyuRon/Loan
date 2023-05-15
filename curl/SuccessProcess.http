@@ -1,0 +1,32 @@
+### 대출 신청 등록
+POST http://localhost:8080/applications
+Content-Type: application/json
+
+< ./json/CreateApplication.json
+
+### 대출 심사 결과 등록
+POST http://localhost:8080/judgements
+Content-Type: application/json
+
+< ./json/CreateJudgement.json
+
+### 대출 심사 결과 대출 신청 서류에 반영
+PATCH http://localhost:8080/judgements/1/grant
+Content-Type: application/json
+
+
+### 대출 신청 이후 심사, 승인금액 부여 등이 완료되고 계약 체결
+PUT http://localhost:8080/applications/1/contract
+Content-Type: application/json
+
+
+### 대출 집행 정보 등록
+POST http://localhost:8080/internal/applications/1/entries
+Content-Type: application/json
+
+< ./json/CreateEntry.json
+
+
+### 대출 집행 정보 조회
+GET http://localhost:8080/internal/applications/1/entries
+Content-Type: application/json
