@@ -1,0 +1,23 @@
+### 대출 심사 결과 등록
+POST http://localhost:8080/judgements
+Content-Type: application/json
+
+< ./json/CreateJudgement.json
+
+### 대출 심사 결과 조회(심사 결과 번호)
+GET http://localhost:8080/judgements/1
+Content-Type: application/json
+
+### 대출 심사 결과 조회(대출 신청 번호)
+GET http://localhost:8080/judgements/applications/1
+Content-Type: application/json
+
+### 대출 심사 결과 수정
+PUT http://localhost:8080/judgements/1
+Content-Type: application/json
+
+< ./json/UpdateJudgement.json
+
+### 대출 심사 결과 삭제
+DELETE http://localhost:8080/judgements/1
+Content-Type: application/json
