@@ -28,5 +28,11 @@ Content-Type: application/json
 
 
 ### 대출 집행 정보 조회
-GET http://localhost:8080/internal/applications/1/entries
+GET http://localhost:8080/internal/applications/1/repayments
 Content-Type: application/json
+
+### 대출금 상환
+POST http://localhost:8080/internal/applications/1/repayments
+Content-Type: application/json
+
+< ./json/CreateRepayment.json

@@ -17,3 +17,24 @@ Content-Type: application/json
 ### 대출 집행 정보 삭제
 DELETE http://localhost:8080/internal/applications/entries/1
 Content-Type: application/json
+
+### 대출금 상환
+POST http://localhost:8080/internal/applications/1/repayments
+Content-Type: application/json
+
+< ./json/CreateRepayment.json
+
+### 대출금 상환 내역 조회
+GET http://localhost:8080/internal/applications/1/repayments
+Content-Type: application/json
+
+
+### 대출금 상환 내역 수정
+PUT http://localhost:8080/internal/applications/repayments/1
+Content-Type: application/json
+
+< ./json/UpdateRepayment.json
+
+### 대출금 상환 내역 삭제
+DELETE http://localhost:8080/internal/applications/repayments/1
+Content-Type: application/json
