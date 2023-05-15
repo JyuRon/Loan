@@ -47,3 +47,8 @@ Content-Type: application/json
 ### 업로드된 전체 파일 삭제
 DELETE http://localhost:8080/applications/1/files
 Content-Type: application/json
+
+
+### 대출 신청 이후 심사, 승인금액 부여 등이 완료되고 계약 체결
+PUT http://localhost:8080/applications/1/contract
+Content-Type: application/json

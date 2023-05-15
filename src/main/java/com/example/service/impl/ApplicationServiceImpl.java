@@ -1,6 +1,7 @@
 package com.example.service.impl;
 
 import com.example.domain.Application;
+import com.example.domain.Judgement;
 import com.example.domain.Terms;
 import com.example.dto.ApplicationDto.AcceptTerms;
 import com.example.dto.ApplicationDto.Request;
@@ -9,6 +10,7 @@ import com.example.exception.BaseException;
 import com.example.exception.ResultType;
 import com.example.repository.AcceptTermsRepository;
 import com.example.repository.ApplicationRepository;
+import com.example.repository.JudgementRepository;
 import com.example.repository.TermsRepository;
 import com.example.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +31,8 @@ public class ApplicationServiceImpl implements ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final TermsRepository termsRepository;
     private final AcceptTermsRepository acceptTermsRepository;
+    private final JudgementRepository judgementRepository;
+
     private final ModelMapper modelMapper;
 
     @Override
@@ -114,5 +119,32 @@ public class ApplicationServiceImpl implements ApplicationService {
             acceptTermsRepository.save(accepted);
         }
         return true;
+    }
+
+    @Override
+    public Response contract(Long applicationId) {
+        // 신청 정보 존재 유무 확인
+        Application application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> {
+                    throw new BaseException(ResultType.SYSTEM_ERROR);
+                });
+
+        // 대출 심사 정보 유무 확인
+        Judgement judgement = judgementRepository.findByApplicationId(applicationId)
+                .orElseThrow(() -> {
+                    throw new BaseException(ResultType.SYSTEM_ERROR);
+                });
+
+        // 대출 심사 승인 금액이 0원보다 큰지 검증, 심사 후 승인금액 부여(grant) 하는 과정을 거치기 때문에 application 참조
+        if(application.getApprovalAmount() == null
+                || application.getApprovalAmount().compareTo(BigDecimal.ZERO) == 0 ){
+            throw new BaseException(ResultType.SYSTEM_ERROR);
+        }
+
+        // 계약 체결
+        application.setContractedAt(LocalDateTime.now());
+        applicationRepository.save(application);
+
+        return modelMapper.map(application, Response.class);
     }
 }

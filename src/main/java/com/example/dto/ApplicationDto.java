@@ -32,6 +32,7 @@ public class ApplicationDto {
         private String email;
         private BigDecimal hopeAmount;
         private LocalDateTime appliedAt;
+        private LocalDateTime contractedAt;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
     }
@@ -43,6 +44,19 @@ public class ApplicationDto {
     @Setter
     public static class AcceptTerms {
         private List<Long> acceptTermsIds;
+
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    @Getter
+    @Setter
+    public static class GrantAmount {
+        private Long applicationId;
+        private BigDecimal approvalAmount;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
 
     }
 }
